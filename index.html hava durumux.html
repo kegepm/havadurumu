@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAYA, HAVADURUMU</title>
+    <style>
+        /* Stil kodları */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #0073e6;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005bb5;
+        }
+
+        #weatherResult {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>KAYA, HAVADURUMU</h1>
+        <input type="text" id="cityInput" placeholder="Şehir Giriniz">
+        <button id="getWeather">Hava Durumunu Göster</button>
+        <div id="weatherResult"></div>
+    </div>
+    <script>
+        // JavaScript kodları
+        document.getElementById('getWeather').addEventListener('click', function () {
+            const city = document.getElementById('cityInput').value;
+            const apiKey = '6065ad1118d17abb3a4570c684db0b1a'; // Senin API anahtarın
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=tr`;
+
+            if (!city) {
+                alert('Lütfen bir şehir adı girin!');
+                return;
+            }
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Şehir bulunamadı.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const weather = `
+                        <h2>${data.name} Hava Durumu</h2>
+                        <p>Sıcaklık: ${data.main.temp}°C</p>
+                        <p>Durum: ${data.weather[0].description}</p>
+                        <p>Nem: ${data.main.humidity}%</p>
+                    `;
+                    document.getElementById('weatherResult').innerHTML = weather;
+                })
+                .catch(error => {
+                    document.getElementById('weatherResult').innerHTML = `<p style="color: red;">${error.message}</p>`;
+                });
+        });
+    </script>
+</body>
+</html>
